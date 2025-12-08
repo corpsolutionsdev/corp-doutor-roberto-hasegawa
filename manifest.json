@@ -1,0 +1,32 @@
+{
+  "name": "Doutor Roberto Hasegawa Filho - Médico Cirurgião",
+  "short_name": "Dr. Hasegawa",
+  "description": "Médico Cirurgião, Especialista em Biópsia. Atendimentos em consultório, cirurgias e biópsias em Canoinhas - SC.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F7F9F9",
+  "theme_color": "#00856F",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "src/img/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "src/img/favicon.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "src/img/favicon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ],
+  "categories": ["medical", "health"],
+  "lang": "pt-BR",
+  "dir": "ltr"
+}
+

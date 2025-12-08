@@ -1,0 +1,11 @@
+# robots.txt para Doutor Roberto Hasegawa Filho
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://www.drrobertohasegawa.com.br/sitemap.xml
+
+# Crawl-delay (opcional - ajuste conforme necessário)
+Crawl-delay: 1
+

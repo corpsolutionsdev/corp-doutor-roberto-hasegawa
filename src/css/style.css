@@ -27,10 +27,7 @@
 /* chrome://flags/#smooth-scrolling */
 html {
   scroll-behavior: smooth;
-}
-
-html,
-body {
+  overflow-x: hidden;
   width: 100%;
   height: 100%;
 }
@@ -204,8 +201,16 @@ nav .close-menu {
 }
 
 /*=== MENU-EXPANDED =================================*/
+html.menu-expanded,
 body.menu-expanded {
   overflow: hidden;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+body.menu-expanded {
+  background-color: var(--bg-light);
 }
 
 body.menu-expanded> :not(nav) {
@@ -225,6 +230,10 @@ body.menu-expanded .close-menu {
   visibility: visible;
 }
 
+body.menu-expanded .close-menu {
+  z-index: 103;
+}
+
 .menu {
   transform: translateY(100%);
 }
@@ -232,7 +241,9 @@ body.menu-expanded .close-menu {
 body.menu-expanded .menu {
   top: 0;
   left: 0;
-  background: var(--primary-color);
+  background: rgba(132, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 
   width: 100vw;
   height: 100vh;
@@ -241,6 +252,8 @@ body.menu-expanded .menu {
 
   transition: transform 300ms;
   transform: translateY(0);
+  z-index: 101;
+  position: fixed;
 }
 
 .menu ul:nth-child(1) {
@@ -258,6 +271,8 @@ body.menu-expanded .menu {
 .menu ul li a {
   color: white;
   text-decoration: none;
+  position: relative;
+  z-index: 102;
 }
 
 .menu .button {
@@ -276,6 +291,8 @@ body.menu-expanded .menu {
 
   margin-top: 4.8rem;
   margin-bottom: 8rem;
+  position: relative;
+  z-index: 102;
 }
 
 .menu .button:hover {
@@ -285,10 +302,14 @@ body.menu-expanded .menu {
   filter: brightness(1.3);
 }
 
-body.menu-expanded .logo,
-body.menu-expanded button {
+body.menu-expanded .logo {
   position: relative;
   z-index: 100;
+}
+
+body.menu-expanded button {
+  position: relative;
+  z-index: 103;
 }
 
 body.menu-expanded .logo path {
@@ -486,19 +507,36 @@ body.menu-expanded button path {
   gap: 0.8rem;
 }
 
+.map-responsive {
+  overflow: hidden;
+  padding-bottom: 56.25%;
+  position: relative;
+  height: 0;
+  border-radius: 1.2rem;
+}
+
+.map-responsive iframe {
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
 /*=== FOOTER =================================*/
 footer {
   background-color: var(--primary-color);
-  padding-block: 6rem;
+  padding-block: 3rem;
 
-  text-align: left;
+  text-align: center;
 
   color: white;
 }
 
 footer .logo {
   display: inline-block;
-  margin-bottom: 2.4rem;
+  margin-bottom: 1.6rem;
+  margin-inline: auto;
 }
 
 footer .logo svg {
@@ -514,18 +552,53 @@ footer p {
   color: var(--brand-beige);
   line-height: 2;
 
-  margin-bottom: 3.2rem;
+  margin-bottom: 2rem;
 }
 
 footer .social-links {
-  justify-content: flex-start;
+  justify-content: center;
+}
+
+footer .footer-dev-info {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  text-align: center;
+}
+
+footer .footer-dev-info p {
+  color: var(--brand-beige);
+  font-size: 1.4rem;
+  line-height: 1.8rem;
+  margin-bottom: 0;
+}
+
+footer .footer-dev-info a {
+  color: white;
+  text-decoration: none;
+  font-weight: 700;
+  transition: opacity 0.3s ease;
+}
+
+footer .footer-dev-info a:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+footer .footer-dev-info .separator {
+  margin: 0 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+footer .footer-dev-info .mobile-break {
+  display: block;
 }
 
 /*=== BACK TO TOP =================================*/
 #backToTopButton {
   position: fixed;
-  bottom: 1rem;
-  right: 2.5rem;
+  bottom: calc(3rem + 50px);
+  right: 3rem;
 
   opacity: 0;
   visibility: hidden;
@@ -538,6 +611,107 @@ footer .social-links {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
+}
+
+#backToTopButton.over-footer circle {
+  fill: white;
+}
+
+#backToTopButton.over-footer path {
+  stroke: var(--primary-color);
+}
+
+/*=== WHATSAPP FLOATING BUTTON =================================*/
+#whatsappButton {
+  position: fixed;
+  bottom: 3rem;
+  right: 2.5rem;
+
+  z-index: 99;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-decoration: none;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+#whatsappButton:hover {
+  transform: scale(1.1);
+}
+
+#whatsappButton:active {
+  transform: scale(0.95);
+}
+
+#whatsappButton svg {
+  width: 48px;
+  height: 48px;
+  display: block;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+#whatsappButton circle {
+  transition: fill 0.3s ease;
+}
+
+#whatsappButton:hover circle {
+  fill: #20BA5A;
+}
+
+/*=== MOBILE SPECIFIC FIXES =================================*/
+@media (max-width: 1023px) {
+  /* Previne overflow horizontal no mobile */
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+  }
+  
+  /* Garante que o botão do WhatsApp sempre fique visível no mobile */
+  #whatsappButton {
+    right: 1.5rem;
+    bottom: 1.5rem;
+    position: fixed;
+  }
+  
+  /* Ajustes do botão Back to Top no mobile */
+  #backToTopButton {
+    bottom: calc(1.75rem + 50px);
+    right: 1.75rem;
+  }
+  
+  /* Centraliza seção de contato no mobile */
+  #contact {
+    text-align: center;
+  }
+  
+  #contact header {
+    text-align: center;
+  }
+  
+  #contact .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  #contact ul {
+    align-items: center;
+    width: 100%;
+  }
+  
+  #contact ul li {
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  
+  #contact .button {
+    margin-inline: auto;
+  }
 }
 
 /*=== RESPONSIVO =================================*/
@@ -797,6 +971,9 @@ footer .social-links {
     padding-bottom:56.25%;
     position:relative;
     height:0;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 2rem;
 }
 
 .map-responsive iframe {
@@ -804,30 +981,45 @@ footer .social-links {
     top:0;
     height:100%;
     width:100%;
+    max-width: 100%;
     position:absolute;
 }
 
   /*=== FOOTER =================================*/
   footer {
-    padding-block: 8rem;
+    padding-block: 4rem;
   }
 
   footer .wrapper {
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas: 'A B';
+    grid-template-columns: 1fr;
+    grid-template-areas: 'A';
+    justify-items: center;
   }
 
   footer .col-a {
     align-self: center;
+    text-align: center;
   }
 
 
   footer .col-b {
-    align-self: center;
-    justify-self: flex-end;
+    display: none;
   }
 
   footer p {
     margin-bottom: 0
+  }
+
+  footer .footer-dev-info {
+    margin-top: 2.4rem;
+    padding-top: 2.4rem;
+  }
+
+  footer .footer-dev-info .mobile-break {
+    display: none;
+  }
+
+  footer .footer-dev-info .separator {
+    margin: 0 1.2rem;
   }
 }

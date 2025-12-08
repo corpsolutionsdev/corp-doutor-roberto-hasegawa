@@ -6,18 +6,22 @@
 const getElements = () => {
   const navigation = document.querySelector('#navigation')
   const backToTopButton = document.querySelector('#backToTopButton')
+  const whatsappButton = document.querySelector('#whatsappButton')
   const home = document.querySelector('#home')
   const services = document.querySelector('#services')
   const about = document.querySelector('#about')
   const contact = document.querySelector('#contact')
+  const footer = document.querySelector('footer')
 
   return {
     navigation,
     backToTopButton,
+    whatsappButton,
     home,
     services,
     about,
-    contact
+    contact,
+    footer
   }
 }
 
@@ -50,6 +54,27 @@ const showBackToTopButtonOnScroll = (backToTopButton) => {
 }
 
 /**
+ * Changes back to top button color when over footer
+ */
+const checkBackToTopButtonOverFooter = (backToTopButton, footer) => {
+  if (!backToTopButton || !footer) return
+
+  const buttonRect = backToTopButton.getBoundingClientRect()
+  const footerRect = footer.getBoundingClientRect()
+  
+  // Check if button bottom is at or below footer top
+  const buttonBottom = buttonRect.bottom
+  const footerTop = footerRect.top
+  
+  if (buttonBottom >= footerTop) {
+    backToTopButton.classList.add('over-footer')
+  } else {
+    backToTopButton.classList.remove('over-footer')
+  }
+}
+
+
+/**
  * Activates menu item based on current scroll position
  */
 const activateMenuAtCurrentSection = (section, navigation) => {
@@ -77,10 +102,11 @@ const activateMenuAtCurrentSection = (section, navigation) => {
  * Handles scroll events
  */
 const handleScroll = (elements) => {
-  const { navigation, backToTopButton, home, services, about, contact } = elements
+  const { navigation, backToTopButton, whatsappButton, home, services, about, contact, footer } = elements
 
   showNavOnScroll(navigation)
   showBackToTopButtonOnScroll(backToTopButton)
+  checkBackToTopButtonOverFooter(backToTopButton, footer)
 
   const sections = [home, services, about, contact]
   sections.forEach(section => {
@@ -92,6 +118,7 @@ const handleScroll = (elements) => {
  * Opens mobile menu
  */
 const openMenu = () => {
+  document.documentElement.classList.add('menu-expanded')
   document.body.classList.add('menu-expanded')
 }
 
@@ -99,7 +126,10 @@ const openMenu = () => {
  * Closes mobile menu
  */
 const closeMenu = () => {
-  document.body.classList.remove('menu-expanded')
+  if (document.body.classList.contains('menu-expanded')) {
+    document.documentElement.classList.remove('menu-expanded')
+    document.body.classList.remove('menu-expanded')
+  }
 }
 
 // ============================================
@@ -235,14 +265,58 @@ const initAOS = () => {
 }
 
 // ============================================
+// CURRENT YEAR UPDATE
+// ============================================
+
+/**
+ * Updates the current year in the copyright text
+ */
+const updateCurrentYear = () => {
+  const yearElement = document.getElementById('currentYear')
+  if (yearElement) {
+    yearElement.textContent = new Date().getFullYear()
+  }
+}
+
+// ============================================
 // INITIALIZATION
 // ============================================
+
+/**
+ * Closes menu when clicking on menu links
+ */
+const initMenuLinks = () => {
+  const menuLinks = document.querySelectorAll('.menu a[href^="#"]')
+  
+  menuLinks.forEach(link => {
+    // Remove onclick attribute and handle via event listener
+    link.removeAttribute('onclick')
+    
+    // Add event listener to close menu
+    link.addEventListener('click', () => {
+      // Close menu immediately when link is clicked
+      closeMenu()
+    })
+  })
+  
+  // Also handle the button separately
+  const menuButton = document.querySelector('.menu .button')
+  if (menuButton) {
+    menuButton.removeAttribute('onclick')
+    menuButton.addEventListener('click', () => {
+      closeMenu()
+    })
+  }
+}
 
 /**
  * Initializes all functionality when DOM is ready
  */
 const init = () => {
   const elements = getElements()
+
+  // Update current year
+  updateCurrentYear()
 
   // Initialize scroll effects
   window.addEventListener('scroll', () => handleScroll(elements))
@@ -253,6 +327,9 @@ const init = () => {
 
   // Initialize number animations
   initNumberAnimation()
+
+  // Initialize menu links
+  initMenuLinks()
 }
 
 // ============================================
